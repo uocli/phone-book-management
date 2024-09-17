@@ -4,26 +4,27 @@ from prettytable import PrettyTable
 
 from contact import Contact
 
+OPERATIONS = {
+    'C': 'Create',
+    'R': 'Retrieve',
+    'F': 'Retrieve from a CSV File',
+    'U': 'Update',
+    'D': 'Delete',
+    'E': 'Exit',
+    'L': 'List',
+    'G': 'Get Option List',
+    'A': 'Admin'
+}
+
 
 class PhoneBook:
     def __init__(self):
         self.contacts = {}
         self.logs = {}
-        self.options = {
-            'C': 'Create',
-            'R': 'Retrieve',
-            'RF': 'Retrieve from CSV File',
-            'U': 'Update',
-            'D': 'Delete',
-            'E': 'Exit',
-            'L': 'List',
-            'G': 'Get Option List',
-            'A': 'Admin'
-        }
+        self.options = OPERATIONS
 
-    def add_contact(self, firs_name, last_name, phone, email, address):
-        contact = Contact(firs_name, last_name, phone, email,
-                          address)
+    def add_contact(self, contact_dict):
+        contact = Contact(contact_dict)
         self.contacts[contact.guid] = contact
 
     def delete_contact(self, name):

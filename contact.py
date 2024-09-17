@@ -4,18 +4,14 @@ from prettytable import PrettyTable
 
 
 class Contact:
-    def __init__(self, first_name, last_name, phone, email, address):
-        self.guid = uuid.uuid4()
-        self.first_name = first_name
-        self.last_name = last_name
-        self.phone = phone
-        self.email = email
-        self.address = address
-
     def __init__(self, d):
-        for key, value in d.items():
-            self.guid = uuid.uuid4()
-            setattr(self, key, value)
+        print(d)
+        self.guid = uuid.uuid4()
+        self.first_name = d['first_name'] if 'first_name' in d else ''
+        self.last_name = d['last_name'] if 'last_name' in d else ''
+        self.phone = d['phone'] if 'phone' in d else ''
+        self.email = d['email'] if 'email' in d else ''
+        self.address = d['address'] if 'address' in d else ''
 
     def __str__(self):
         contact_table = PrettyTable()

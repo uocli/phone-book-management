@@ -3,7 +3,7 @@ import sys
 
 from prettytable import PrettyTable
 
-from phonebook import PhoneBook
+from phonebook import PhoneBook, OPERATIONS
 from contact import Contact
 
 
@@ -25,13 +25,17 @@ def main():
             phone = input("Phone: ")
             email = input("Email (optional, press Enter to skip): ")
             address = input("Address (optional, press Enter to skip): ")
-            phonebook.add_contact(first_name, last_name, phone, email, address)
+            contact_dict = {'first_name': first_name, 'last_name': last_name,
+                            'phone': phone, 'email': email, 'address': address}
+            phonebook.add_contact(contact_dict)
         elif option == 'L':
             phonebook.list_contacts()
+        elif option == 'R':
+            path = input("Please provide a complete csv file path:")
         elif option == 'E':
             print("Goodbye!")
             sys.exit()
-        elif option == 'RF':
+        elif option == 'F':
             path = input("Please provide a complete csv file path:")
             try:
                 with open(path) as csv_file:
