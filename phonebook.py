@@ -12,6 +12,7 @@ class PhoneBook:
         self.options = {
             'C': 'Create',
             'R': 'Retrieve',
+            'RF': 'Retrieve from CSV File',
             'U': 'Update',
             'D': 'Delete',
             'E': 'Exit',

@@ -1,8 +1,10 @@
+import csv
 import sys
 
 from prettytable import PrettyTable
 
 from phonebook import PhoneBook
+from contact import Contact
 
 
 def main():
@@ -29,6 +31,16 @@ def main():
         elif option == 'E':
             print("Goodbye!")
             sys.exit()
+        elif option == 'RF':
+            path = input("Please provide a complete csv file path:")
+            try:
+                with open(path) as csv_file:
+                    reader = csv.DictReader(csv_file)
+                    for row in reader:
+                        print(Contact(d=row))
+            except FileNotFoundError as e:
+                print(e)
+
         else:
             print("Only these options are available, please try again!")
             print(option_table)
