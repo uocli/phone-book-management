@@ -1,13 +1,14 @@
 from datetime import datetime
-
+# from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
 from prettytable import PrettyTable
 
 from contact import Contact
 
 OPERATIONS = {
     'C': 'Create',
-    'R': 'Retrieve',
-    'F': 'Retrieve from a CSV File',
+    'Q  ': 'Fuzzy Query',
+    'F': 'Load contacts from a CSV file',
     'U': 'Update',
     'D': 'Delete',
     'E': 'Exit',
@@ -34,12 +35,25 @@ class PhoneBook:
         else:
             print(f"Contact '{name}' not found.")
 
-    def search_contact(self, name):
-        phone = self.contacts.get(name)
-        if phone:
-            print(f"Contact '{name}': {phone}")
-        else:
-            print(f"Contact '{name}' not found.")
+    def search_contact(self, query):
+        contact_details = []
+        contact_list = []
+        for _, contact in self.contacts.items():
+            details = [
+                f"{contact.first_name}",
+                f"{contact.last_name}",
+                f"{contact.phone}",
+                f"{contact.email}",
+                f"{contact.address}"
+            ]
+            contact_list.append(contact)
+            contact_details.append(" | ".join(details))
+        best_match = process.extractOne(query, contact_details)
+
+        if best_match:
+            matched_index = contact_details.index(best_match[0])
+            return contact_list[matched_index]
+        return 'No contact found!'
 
     def list_contacts(self):
         if self.contacts:
