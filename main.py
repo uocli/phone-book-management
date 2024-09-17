@@ -1,19 +1,11 @@
 import csv
 import sys
-import uuid
 
 from prettytable import PrettyTable
 
 from contact import Contact
 from phonebook import PhoneBook
-
-
-def is_valid_uuid(uuid_str: str):
-    try:
-        uuid.UUID(uuid_str)
-        return True
-    except ValueError:
-        return False
+from utils import is_valid_uuid
 
 
 def main():

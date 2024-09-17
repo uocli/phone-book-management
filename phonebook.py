@@ -92,7 +92,3 @@ class PhoneBook:
             self.logs[guid] = []
         self.logs[guid].append(
             datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ': ' + operation)
-
-
-def is_phone_number():
-    pass
