@@ -1,35 +1,11 @@
 import csv
-import readline
 import sys
 import uuid
 
 from prettytable import PrettyTable
-from pyautogui import typewrite
 
 from contact import Contact
 from phonebook import PhoneBook
-
-
-def readline_input(prompt, prefill=''):
-    readline.set_startup_hook(lambda: readline.insert_text(prefill))
-    try:
-        return input(prompt)
-    finally:
-        readline.set_startup_hook()
-
-
-def input_with_default(prompt, prefill=''):
-    try:
-        print(prompt)
-        typewrite(prefill)
-        return input()
-    except (ImportError, KeyError):
-        import readline
-        readline.set_startup_hook(lambda: readline.insert_text(prefill))
-    try:
-        return input(prompt)
-    finally:
-        readline.set_startup_hook()
 
 
 def is_valid_uuid(uuid_str: str):
@@ -119,14 +95,18 @@ def main():
                         new_phone = contact.phone
 
                 new_email = input(
-                    f'Email: [{contact.email}] (Optional, press Enter to skip)')
-                if not new_email.strip():
-                    new_email = contact.email
+                    f'Email: [{contact.email}] (Optional, press Enter to skip or enter space to remove)')
+                if not new_email:
+                    new_email = contact.address
+                elif not new_email.strip():
+                    new_email = new_email.strip()
 
                 new_address = input(
-                    f'Address: [{contact.address}] (Optional, press Enter to skip)')
-                if not new_address.strip():
+                    f'Address: [{contact.address}] (Optional, press Enter to skip or enter space to remove)')
+                if not new_address:
                     new_address = contact.address
+                elif not new_address.strip():
+                    new_address = new_address.strip()
 
                 contact = Contact({
                     "guid": contact.guid,

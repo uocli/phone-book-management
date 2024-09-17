@@ -75,12 +75,10 @@ class PhoneBook:
 
     def list_contacts(self):
         if self.contacts:
-            print("Contacts:")
             phone_table = PrettyTable()
             phone_table.field_names = ["ID", "First Name", "Last Name", "Phone",
                                        "Email", "Address"]
             for guid, contact in self.contacts.items():
-                print(contact)
                 phone_table.add_row(
                     [guid, contact.first_name, contact.last_name,
                      contact.phone, contact.email,
