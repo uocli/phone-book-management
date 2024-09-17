@@ -1,5 +1,5 @@
+import uuid
 from datetime import datetime
-# from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 from prettytable import PrettyTable
 
@@ -20,7 +20,7 @@ OPERATIONS = {
 
 class PhoneBook:
     def __init__(self):
-        self.contacts = {}
+        self.contacts = {}  # uuid.UUID => Contact
         self.logs = {}
         self.options = OPERATIONS
 
@@ -55,15 +55,34 @@ class PhoneBook:
             return contact_list[matched_index]
         return 'No contact found!'
 
+    def get_contact_by_id(self, guid):
+        for _, contact in self.contacts.items():
+            if uuid.UUID(guid) == contact.guid:
+                return contact
+
+        return None
+
+    def update_contact(self, contact: Contact):
+        self.contacts[contact.guid] = Contact({
+            "guid": contact.guid,
+            "first_name": contact.first_name,
+            "last_name": contact.last_name,
+            "phone": contact.phone,
+            "email": contact.email,
+            "address": contact.address,
+        }, is_new=False)
+        print(self.contacts[contact.guid])
+
     def list_contacts(self):
         if self.contacts:
             print("Contacts:")
             phone_table = PrettyTable()
             phone_table.field_names = ["ID", "First Name", "Last Name", "Phone",
                                        "Email", "Address"]
-            for key, contact in self.contacts.items():
+            for guid, contact in self.contacts.items():
+                print(contact)
                 phone_table.add_row(
-                    [contact.guid, contact.first_name, contact.last_name,
+                    [guid, contact.first_name, contact.last_name,
                      contact.phone, contact.email,
                      contact.address])
             print(phone_table)

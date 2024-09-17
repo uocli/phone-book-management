@@ -1,9 +1,43 @@
 import csv
+import readline
 import sys
+import uuid
 
 from prettytable import PrettyTable
+from pyautogui import typewrite
 
+from contact import Contact
 from phonebook import PhoneBook
+
+
+def readline_input(prompt, prefill=''):
+    readline.set_startup_hook(lambda: readline.insert_text(prefill))
+    try:
+        return input(prompt)
+    finally:
+        readline.set_startup_hook()
+
+
+def input_with_default(prompt, prefill=''):
+    try:
+        print(prompt)
+        typewrite(prefill)
+        return input()
+    except (ImportError, KeyError):
+        import readline
+        readline.set_startup_hook(lambda: readline.insert_text(prefill))
+    try:
+        return input(prompt)
+    finally:
+        readline.set_startup_hook()
+
+
+def is_valid_uuid(uuid_str: str):
+    try:
+        uuid.UUID(uuid_str)
+        return True
+    except ValueError:
+        return False
 
 
 def main():
@@ -52,6 +86,57 @@ def main():
                 print(e)
             except TypeError as e:
                 print(e)
+        elif option == 'U':
+            # Updating a contact
+            guid = ''
+            while not is_valid_uuid(guid):
+                guid = input("Please provide a valid contact ID:")
+
+            contact = phonebook.get_contact_by_id(guid)
+            if contact is None:
+                print("No contact found!")
+            else:
+                print(contact)
+                new_first_name = ''
+                new_last_name = ''
+                new_phone = ''
+                while not new_first_name.strip():
+                    new_first_name = input(
+                        f'First Name: [{contact.first_name}] (Required, press Enter to skip)')
+                    if not new_first_name:
+                        new_first_name = contact.first_name
+
+                while not new_last_name.strip():
+                    new_last_name = input(
+                        f'Last Name: [{contact.last_name}] (Required, press Enter to skip)')
+                    if not new_last_name:
+                        new_last_name = contact.last_name
+
+                while not new_phone.strip():
+                    new_phone = input(
+                        f'Phone: [{contact.phone}] (Required, press Enter to skip)')
+                    if not new_phone:
+                        new_phone = contact.phone
+
+                new_email = input(
+                    f'Email: [{contact.email}] (Optional, press Enter to skip)')
+                if not new_email.strip():
+                    new_email = contact.email
+
+                new_address = input(
+                    f'Address: [{contact.address}] (Optional, press Enter to skip)')
+                if not new_address.strip():
+                    new_address = contact.address
+
+                contact = Contact({
+                    "guid": contact.guid,
+                    "first_name": new_first_name,
+                    "last_name": new_last_name,
+                    "phone": new_phone,
+                    "email": new_email,
+                    "address": new_address,
+                }, is_new=False)
+                phonebook.update_contact(contact)
         else:
             # Getting an invalid operation
             print("Only these options are available, please try again!")

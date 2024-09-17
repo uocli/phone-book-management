@@ -4,8 +4,8 @@ from prettytable import PrettyTable
 
 
 class Contact:
-    def __init__(self, d):
-        self.guid = uuid.uuid4()
+    def __init__(self, d: dict, is_new=True):
+        self.guid = uuid.uuid4() if is_new else d['guid']
         self.first_name = d['first_name'] if 'first_name' in d else ''
         self.last_name = d['last_name'] if 'last_name' in d else ''
         self.phone = d['phone'] if 'phone' in d else ''
@@ -14,9 +14,10 @@ class Contact:
 
     def __str__(self):
         contact_table = PrettyTable()
-        contact_table.field_names = ["First Name", "Last Name", 'Phone',
+        contact_table.field_names = ["ID", "First Name", "Last Name", 'Phone',
                                      'Email', 'Address']
         contact_table.add_row([
+            self.guid,
             self.first_name,
             self.last_name,
             self.phone,
