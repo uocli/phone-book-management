@@ -5,7 +5,6 @@ from prettytable import PrettyTable
 
 class Contact:
     def __init__(self, d):
-        print(d)
         self.guid = uuid.uuid4()
         self.first_name = d['first_name'] if 'first_name' in d else ''
         self.last_name = d['last_name'] if 'last_name' in d else ''

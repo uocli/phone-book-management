@@ -41,10 +41,11 @@ def main():
                 with open(path) as csv_file:
                     reader = csv.DictReader(csv_file)
                     for row in reader:
-                        print(Contact(d=row))
+                        phonebook.add_contact(row)
             except FileNotFoundError as e:
                 print(e)
-
+            except TypeError as e:
+                print(e)
         else:
             print("Only these options are available, please try again!")
             print(option_table)
