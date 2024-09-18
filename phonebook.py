@@ -39,6 +39,11 @@ def sorting_contact(contacts, desc=False):
 
 
 def count_contacts(contacts):
+    """
+    Count contacts which are not deleted in the phone book
+    :param contacts: a given contact dict
+    :return: an integer greater or equal to 0
+    """
     counter = 0
     for _, contact in contacts.items():
         if not contact.is_deleted():
@@ -48,6 +53,13 @@ def count_contacts(contacts):
 
 def list_contacts(contacts, start_date_str: str = None,
                   end_date_str: str = None):
+    """
+    List contacts created within the given time frame
+    :param contacts: a contact dict (UUID: contact.Contact)
+    :param start_date_str: start date string in format yyyy-MM-dd
+    :param end_date_str: end date string in format yyyy-MM-dd
+    :return: None
+    """
     start_date = None
     end_date = None
     if start_date_str is not None:
@@ -103,6 +115,10 @@ def create_contact_dict():
 
 
 class PhoneBook:
+    """
+    Phone Book Manager
+    """
+
     def __init__(self):
         """
         The constructor of PhoneBook with initialized contacts and options
@@ -159,6 +175,11 @@ class PhoneBook:
             print('No contact found!')
 
     def get_contact_by_id(self, guid):
+        """
+        Get a contact with a given uuid
+        :param guid: uuid.UUID string
+        :return: a contact
+        """
         for _, contact in self.contacts.items():
             if uuid.UUID(guid) == contact.guid and not contact.is_deleted():
                 return contact
@@ -231,6 +252,10 @@ class PhoneBook:
             print(self.contacts[contact.guid])
 
     def delete_contact(self):
+        """
+        Delete a contact
+        :return: None
+        """
         if count_contacts(self.contacts):
             guid = input("Please provide a valid contact ID:")
             if is_valid_uuid(guid):

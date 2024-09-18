@@ -7,6 +7,10 @@ from utils import is_valid_date
 
 
 class Contact:
+    """
+    Contact
+    """
+
     def __init__(self, d: dict, is_new=True, from_file=False):
         self.guid = uuid.uuid4() if is_new else d['guid']
         self.first_name = d['first_name'] if 'first_name' in d else ''
@@ -21,15 +25,31 @@ class Contact:
                is_valid_date(d["created_date"]) else datetime.now().date()
 
     def created_date(self):
+        """
+        Get the created date of the contact
+        :return: datetime.datetime.date object
+        """
         return self.__created_date
 
     def delete(self):
+        """
+        Soft-delete a contact itself
+        :return: None
+        """
         self._is_deleted = True
 
     def is_deleted(self):
+        """
+        Get the deletion status of a contact
+        :return: True if the contact has been deleted, False otherwise
+        """
         return self._is_deleted == True
 
     def __str__(self):
+        """
+        Reformat the output of a contact
+        :return: a formatted contact string
+        """
         contact_table = PrettyTable()
         contact_table.field_names = ["ID", "First Name", "Last Name", 'Phone',
                                      'Email', 'Address', "Created Date"]
@@ -42,5 +62,4 @@ class Contact:
             self.address,
             self.__created_date
         ])
-        # f'First Name: {self.first_name}, Last Name: {self.last_name}, Phone: {self.phone}, Email: {self.email}, Address: {self.address}'
         return contact_table.get_string()
