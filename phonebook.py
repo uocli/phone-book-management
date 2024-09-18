@@ -12,7 +12,9 @@ OPERATIONS = {
     'U': 'Update',
     'D': 'Delete',
     'E': 'Exit',
-    'L': 'List'
+    'L': 'List',
+    'LA': 'List in ascending order',
+    'LD': 'List in descending order',
 }
 
 
