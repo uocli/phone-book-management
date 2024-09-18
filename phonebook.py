@@ -6,7 +6,7 @@ from prettytable import PrettyTable
 
 from contact import Contact
 from custom_logger import logger
-from utils import is_valid_phone_number, is_valid_email
+from utils import is_valid_phone_number, is_valid_email, is_valid_uuid
 
 OPERATIONS = {
     'C': 'Create',
@@ -19,11 +19,6 @@ OPERATIONS = {
     'LA': 'List in ascending order',
     'LD': 'List in descending order',
 }
-
-
-def delete_contact(contact: Contact):
-    contact.delete()
-    logger.warning(contact.guid)
 
 
 def count_contacts(contacts):
@@ -109,7 +104,12 @@ class PhoneBook:
         self.contacts[contact.guid] = contact
         logger.warning(contact.guid)
 
-    def search_contact(self, query):
+    def search_contact(self):
+        """
+        Fuzzy search a contact
+        :return: None
+        """
+        fuzzy_input = input("Please provide the contact you want to query:")
         contact_details = []
         contact_list = []
         for _, contact in self.contacts.items():
@@ -125,13 +125,16 @@ class PhoneBook:
             ]
             contact_list.append(contact)
             contact_details.append(" | ".join(details))
-        best_match = process.extractOne(query, contact_details)
-
+        best_match = process.extractOne(fuzzy_input, contact_details)
+        best_match_contact = None
         if best_match:
             matched_index = contact_details.index(best_match[0])
             logger.warning(contact_list[matched_index].guid)
-            return contact_list[matched_index]
-        return 'No contact found!'
+            best_match_contact = contact_list[matched_index]
+        if best_match_contact is not None:
+            print(best_match_contact)
+        else:
+            print('No contact found!')
 
     def get_contact_by_id(self, guid):
         for _, contact in self.contacts.items():
@@ -151,3 +154,27 @@ class PhoneBook:
         }, is_new=False)
         logger.warning(contact.guid)
         print(self.contacts[contact.guid])
+
+    def delete_contact(self):
+        if count_contacts(self.contacts):
+            guid = input("Please provide a valid contact ID:")
+            if is_valid_uuid(guid):
+                contact = self.get_contact_by_id(guid)
+                if contact is not None:
+                    print(contact)
+                    confirmation_answer = 'Yn'
+                    while confirmation_answer != 'Y' and confirmation_answer != 'n' and confirmation_answer != '':
+                        confirmation_answer = input(
+                            'Delete this contact? [Y/n(Default)]')
+                    if confirmation_answer == 'Y':
+                        contact.delete()
+                        logger.warning(contact.guid)
+                        print('The contact was deleted!')
+                    else:
+                        print('The deletion was canceled!')
+                else:
+                    print('No contact found!')
+            else:
+                print("Invalid ID:", guid)
+        else:
+            print('No contact can be found for deletion!')

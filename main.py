@@ -4,10 +4,9 @@ import sys
 from prettytable import PrettyTable
 
 from contact import Contact
-from phonebook import PhoneBook, list_contacts, count_contacts, delete_contact, \
+from phonebook import PhoneBook, list_contacts, count_contacts, \
     create_contact_dict
-from utils import is_valid_uuid, is_valid_email, \
-    sorted_contact, is_valid_date
+from utils import is_valid_uuid, is_valid_email, sorted_contact, is_valid_date
 from custom_logger import logger
 
 
@@ -34,32 +33,10 @@ def main():
             list_contacts(phonebook.contacts)
         elif option == 'Q':
             # Fuzzy querying a contact
-            fuzzy_input = input("Please provide the contact you want to query:")
-            best_match = phonebook.search_contact(fuzzy_input)
-            print(best_match)
+            phonebook.search_contact()
         elif option == 'D':
             # Soft-deleting a contact
-            if count_contacts(phonebook.contacts):
-                guid = input("Please provide a valid contact ID:")
-                if is_valid_uuid(guid):
-                    contact = phonebook.get_contact_by_id(guid)
-                    if contact is not None:
-                        print(contact)
-                        confirmation_answer = 'Yn'
-                        while confirmation_answer != 'Y' and confirmation_answer != 'n' and confirmation_answer != '':
-                            confirmation_answer = input(
-                                'Delete this contact? [Y/n(Default)]')
-                        if confirmation_answer == 'Y':
-                            delete_contact(contact)
-                            print('The contact was deleted!')
-                        else:
-                            print('The deletion was canceled!')
-                    else:
-                        print('No contact found!')
-                else:
-                    print("Invalid ID:", guid)
-            else:
-                print('No contact can be found for deletion!')
+            phonebook.delete_contact()
         elif option == 'E':
             # Exiting the system
             print("Goodbye!")
