@@ -38,6 +38,26 @@ def main():
             fuzzy_input = input("Please provide the contact you want to query:")
             best_match = phonebook.search_contact(fuzzy_input)
             print(best_match)
+        elif option == 'D':
+            # Soft-deleting a contact
+            if phonebook.count_contacts():
+                guid = input("Please provide a valid contact ID:")
+                if is_valid_uuid(guid):
+                    contact = phonebook.get_contact_by_id(guid)
+                    print(contact)
+                    confirmation_answer = 'Yn'
+                    while confirmation_answer != 'Y' and confirmation_answer != 'n' and confirmation_answer != '':
+                        confirmation_answer = input(
+                            'Delete this contact? [Y/n(Default)]')
+                    if confirmation_answer == 'Y':
+                        phonebook.delete_contact(contact)
+                        print('The contact was deleted!')
+                    else:
+                        print('The deletion was canceled!')
+                else:
+                    print("Invalid ID:", guid)
+            else:
+                print('No contact can be found for deletion!')
         elif option == 'E':
             # Exiting the system
             print("Goodbye!")

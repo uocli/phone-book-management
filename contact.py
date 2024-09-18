@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 from prettytable import PrettyTable
 
@@ -11,6 +12,14 @@ class Contact:
         self.phone = d['phone'] if 'phone' in d else ''
         self.email = d['email'] if 'email' in d else ''
         self.address = d['address'] if 'address' in d else ''
+        self._is_deleted = False
+        self.__created_at = datetime.now()
+
+    def delete(self):
+        self._is_deleted = True
+
+    def is_deleted(self):
+        return self._is_deleted == True
 
     def __str__(self):
         contact_table = PrettyTable()

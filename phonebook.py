@@ -28,17 +28,23 @@ class PhoneBook:
         contact = Contact(contact_dict)
         self.contacts[contact.guid] = contact
 
-    def delete_contact(self, name):
-        if name in self.contacts:
-            del self.contacts[name]
-            print(f"Contact '{name}' deleted.")
-        else:
-            print(f"Contact '{name}' not found.")
+    def delete_contact(self, contact: Contact):
+        contact.delete()
+
+    def count_contacts(self):
+        counter = 0
+        for _, contact in self.contacts.items():
+            if not contact.is_deleted():
+                counter += 1
+        return counter
 
     def search_contact(self, query):
         contact_details = []
         contact_list = []
         for _, contact in self.contacts.items():
+            if contact.is_deleted():
+                continue
+
             details = [
                 f"{contact.first_name}",
                 f"{contact.last_name}",
@@ -74,11 +80,13 @@ class PhoneBook:
         print(self.contacts[contact.guid])
 
     def list_contacts(self):
-        if self.contacts:
+        if self.count_contacts():
             phone_table = PrettyTable()
             phone_table.field_names = ["ID", "First Name", "Last Name", "Phone",
                                        "Email", "Address"]
             for guid, contact in self.contacts.items():
+                if contact.is_deleted():
+                    continue
                 phone_table.add_row(
                     [guid, contact.first_name, contact.last_name,
                      contact.phone, contact.email,
