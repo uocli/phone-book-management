@@ -1,4 +1,6 @@
 import uuid
+from datetime import datetime
+
 from fuzzywuzzy import process
 from prettytable import PrettyTable
 
@@ -31,13 +33,26 @@ def count_contacts(contacts):
     return counter
 
 
-def list_contacts(contacts):
+def list_contacts(contacts, start_date: str = None,
+                  end_date: str = None):
+    start_datetime = None
+    end_datetime = None
+    if start_date is not None:
+        start_datetime = datetime.strptime(start_date, '%Y-%m-%d')
+
+    if end_date is not None:
+        end_datetime = datetime.strptime(end_date, '%Y-%m-%d')
+
     if count_contacts(contacts):
         phone_table = PrettyTable()
         phone_table.field_names = ["ID", "First Name", "Last Name", "Phone",
                                    "Email", "Address", "Created Date"]
         for guid, contact in contacts.items():
             if contact.is_deleted():
+                continue
+            if start_datetime is not None and contact.created_at() < start_datetime:
+                continue
+            if end_datetime is not None and contact.created_at() > end_datetime:
                 continue
             phone_table.add_row(
                 [guid, contact.first_name, contact.last_name,

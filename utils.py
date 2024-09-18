@@ -1,7 +1,5 @@
 import re
 import uuid
-from collections import OrderedDict
-from operator import getitem
 
 from email_validator import validate_email, EmailNotValidError
 
@@ -28,6 +26,14 @@ def is_valid_email(email):
         return True
     except EmailNotValidError as e:
         return False
+
+
+def is_valid_date(date_str):
+    match = re.search('^\d{4}-\d{2}-\d{2}$', date_str)
+    # 2024-05-06
+    if match:
+        return True
+    return False
 
 
 def sorted_contact(contacts, reserve=False):

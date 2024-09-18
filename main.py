@@ -6,7 +6,7 @@ from prettytable import PrettyTable
 from contact import Contact
 from phonebook import PhoneBook, list_contacts, count_contacts, delete_contact
 from utils import is_valid_uuid, is_valid_phone_number, is_valid_email, \
-    sorted_contact
+    sorted_contact, is_valid_date
 from custom_logger import logger
 
 
@@ -81,6 +81,17 @@ def main():
             # Sorting contacts in ascending (LA) or descending (LD) order
             list_contacts(sorted_contact(phonebook.contacts,
                                          True if option == 'LD' else False))
+        elif option == 'LF':
+            # Listing with filters
+            start_date = ''
+            end_date = ''
+            while not is_valid_date(start_date):
+                start_date = input('Please specify a start date (yyyy-MM-dd)')
+
+            while not is_valid_date(end_date):
+                end_date = input('Please specify an end date (yyyy-MM-dd)')
+
+            list_contacts(phonebook.contacts, start_date, end_date)
         elif option == 'F':
             # Reading a list contacts from a csv file
             path = input("Please provide a complete csv file path:")
