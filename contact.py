@@ -15,11 +15,10 @@ class Contact:
         self.email = d['email'] if 'email' in d else ''
         self.address = d['address'] if 'address' in d else ''
         self._is_deleted = False
-        create_date = d["created_date"]
-        self.__created_date = datetime.strptime(create_date,
-                                                '%Y-%m-%d').date() if from_file and \
-                                                                      create_date and is_valid_date(
-            create_date) else datetime.now().date()
+        self.__created_date = datetime.strptime(d["created_date"],
+                                                '%Y-%m-%d').date() \
+            if from_file and d["created_date"] and \
+               is_valid_date(d["created_date"]) else datetime.now().date()
 
     def created_date(self):
         return self.__created_date

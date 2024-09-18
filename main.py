@@ -4,8 +4,9 @@ import sys
 from prettytable import PrettyTable
 
 from contact import Contact
-from phonebook import PhoneBook, list_contacts, count_contacts, delete_contact
-from utils import is_valid_uuid, is_valid_phone_number, is_valid_email, \
+from phonebook import PhoneBook, list_contacts, count_contacts, delete_contact, \
+    create_contact_dict
+from utils import is_valid_uuid, is_valid_email, \
     sorted_contact, is_valid_date
 from custom_logger import logger
 
@@ -26,21 +27,7 @@ def main():
         if option == 'C':
             # Creating a new contact manually
             print('You are creating a new contact!')
-            first_name = ''
-            while not first_name:
-                first_name = input("First Name (Required): ")
-            last_name = ''
-            while not last_name:
-                last_name = input("Last Name (Required): ")
-            phone = ''
-            while not is_valid_phone_number(phone):
-                phone = input("Phone in format (xxx) xxx-xxxx) (Required): ")
-            email = input("Email (optional, press Enter to skip): ")
-            while email and not is_valid_email(email):
-                email = input("Email (optional, press Enter to skip): ")
-            address = input("Address (optional, press Enter to skip): ")
-            contact_dict = {'first_name': first_name, 'last_name': last_name,
-                            'phone': phone, 'email': email, 'address': address}
+            contact_dict = create_contact_dict()
             phonebook.add_contact(contact_dict)
         elif option == 'L':
             # Listing all contacts

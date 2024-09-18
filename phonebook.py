@@ -6,6 +6,7 @@ from prettytable import PrettyTable
 
 from contact import Contact
 from custom_logger import logger
+from utils import is_valid_phone_number, is_valid_email
 
 OPERATIONS = {
     'C': 'Create',
@@ -63,13 +64,47 @@ def list_contacts(contacts, start_date_str: str = None,
         print("No contacts found.")
 
 
+def create_contact_dict():
+    """
+    Create a contact manually
+    :return: a contact dict
+    """
+    first_name = ''
+    while not first_name:
+        first_name = input("First Name (Required): ")
+
+    last_name = ''
+    while not last_name:
+        last_name = input("Last Name (Required): ")
+
+    phone = ''
+    while not is_valid_phone_number(phone):
+        phone = input("Phone in format (xxx) xxx-xxxx) (Required): ")
+
+    email = input("Email (optional, press Enter to skip): ")
+    while email and not is_valid_email(email):
+        email = input("Email (optional, press Enter to skip): ")
+
+    address = input("Address (optional, press Enter to skip): ")
+    return {'first_name': first_name, 'last_name': last_name,
+            'phone': phone, 'email': email, 'address': address}
+
+
 class PhoneBook:
     def __init__(self):
+        """
+        The constructor of PhoneBook with initialized contacts and options
+        """
         self.contacts = {}  # uuid.UUID => Contact
-        self.logs = {}
         self.options = OPERATIONS
 
     def add_contact(self, contact_dict, from_file=False):
+        """
+        Add a contact to the phone book
+        :param contact_dict: a given contact dict
+        :param from_file: a boolean flag indicating if the contact is from a csv file
+        :return: None
+        """
         contact = Contact(contact_dict, is_new=True, from_file=from_file)
         self.contacts[contact.guid] = contact
         logger.warning(contact.guid)
