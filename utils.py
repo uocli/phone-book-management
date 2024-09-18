@@ -36,12 +36,4 @@ def is_valid_date(date_str):
     return False
 
 
-def sorted_contact(contacts, reserve=False):
-    sorted_dict = dict(sorted(contacts.items(),
-                              key=lambda item: item[1].last_name,
-                              reverse=reserve))
-    new_contact_dict = {}
-    for c in sorted_dict.items():
-        new_contact_dict[c[1].guid] = c[1]
 
-    return new_contact_dict

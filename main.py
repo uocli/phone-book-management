@@ -4,9 +4,9 @@ import sys
 from prettytable import PrettyTable
 
 from contact import Contact
-from phonebook import PhoneBook, list_contacts, count_contacts, \
-    create_contact_dict
-from utils import is_valid_uuid, is_valid_email, sorted_contact, is_valid_date
+from phonebook import PhoneBook, list_contacts, create_contact_dict, \
+    sorting_contact
+from utils import is_valid_uuid, is_valid_email, is_valid_date
 from custom_logger import logger
 
 
@@ -43,8 +43,9 @@ def main():
             sys.exit()
         elif option == 'LA' or option == 'LD':
             # Sorting contacts in ascending (LA) or descending (LD) order
-            list_contacts(sorted_contact(phonebook.contacts,
-                                         True if option == 'LD' else False))
+            sorted_contact_dict = sorting_contact(phonebook.contacts,
+                                                  desc=True if option == 'LD' else False)
+            list_contacts(sorted_contact_dict)
         elif option == 'LF':
             # Listing with filters
             start_date = ''

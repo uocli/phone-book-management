@@ -21,6 +21,23 @@ OPERATIONS = {
 }
 
 
+def sorting_contact(contacts, desc=False):
+    """
+    Sort a given dict by the last_name of the contacts
+    :param contacts: contact dict (UUID: contact.Contact)
+    :param desc: a boolean flag indicating the sorting order, asc by default.
+    :return: new sorted contact dict
+    """
+    sorted_dict = dict(sorted(contacts.items(),
+                              key=lambda item: item[1].last_name,
+                              reverse=desc))
+    new_contact_dict = {}
+    for c in sorted_dict.items():
+        new_contact_dict[c[1].guid] = c[1]
+
+    return new_contact_dict
+
+
 def count_contacts(contacts):
     counter = 0
     for _, contact in contacts.items():
