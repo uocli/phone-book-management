@@ -5,7 +5,7 @@ from prettytable import PrettyTable
 
 from contact import Contact
 from phonebook import PhoneBook
-from utils import is_valid_uuid
+from utils import is_valid_uuid, is_valid_phone_number
 from custom_logger import logger
 
 
@@ -19,7 +19,7 @@ def main():
         option_table.add_row([option, description])
     print(option_table)
     while True:
-        option = input("Choose an option (C,R,U,D or E): ")
+        option = input("Choose an option: ")
         option = option.upper()
         logger.info(option)
         if option == 'C':
@@ -27,7 +27,9 @@ def main():
             print('You are creating a new contact!')
             first_name = input("First Name: ")
             last_name = input("Last Name: ")
-            phone = input("Phone: ")
+            phone = ''
+            while not is_valid_phone_number(phone):
+                phone = input("Phone: ")
             email = input("Email (optional, press Enter to skip): ")
             address = input("Address (optional, press Enter to skip): ")
             contact_dict = {'first_name': first_name, 'last_name': last_name,
