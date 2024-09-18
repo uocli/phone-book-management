@@ -15,6 +15,9 @@ class Contact:
         self._is_deleted = False
         self.__created_at = datetime.now()
 
+    def created_at(self):
+        return self.__created_at
+
     def delete(self):
         self._is_deleted = True
 
@@ -24,14 +27,15 @@ class Contact:
     def __str__(self):
         contact_table = PrettyTable()
         contact_table.field_names = ["ID", "First Name", "Last Name", 'Phone',
-                                     'Email', 'Address']
+                                     'Email', 'Address', "CreatedDate"]
         contact_table.add_row([
             self.guid,
             self.first_name,
             self.last_name,
             self.phone,
             self.email,
-            self.address
+            self.address,
+            self.__created_at
         ])
         # f'First Name: {self.first_name}, Last Name: {self.last_name}, Phone: {self.phone}, Email: {self.email}, Address: {self.address}'
         return contact_table.get_string()

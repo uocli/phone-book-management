@@ -35,14 +35,14 @@ def list_contacts(contacts):
     if count_contacts(contacts):
         phone_table = PrettyTable()
         phone_table.field_names = ["ID", "First Name", "Last Name", "Phone",
-                                   "Email", "Address"]
+                                   "Email", "Address", "Created Date"]
         for guid, contact in contacts.items():
             if contact.is_deleted():
                 continue
             phone_table.add_row(
                 [guid, contact.first_name, contact.last_name,
                  contact.phone, contact.email,
-                 contact.address])
+                 contact.address, contact.created_at()])
         print(phone_table)
     else:
         print("No contacts found.")
@@ -85,7 +85,7 @@ class PhoneBook:
 
     def get_contact_by_id(self, guid):
         for _, contact in self.contacts.items():
-            if uuid.UUID(guid) == contact.guid:
+            if uuid.UUID(guid) == contact.guid and not contact.is_deleted():
                 return contact
 
         return None

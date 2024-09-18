@@ -56,16 +56,19 @@ def main():
                 guid = input("Please provide a valid contact ID:")
                 if is_valid_uuid(guid):
                     contact = phonebook.get_contact_by_id(guid)
-                    print(contact)
-                    confirmation_answer = 'Yn'
-                    while confirmation_answer != 'Y' and confirmation_answer != 'n' and confirmation_answer != '':
-                        confirmation_answer = input(
-                            'Delete this contact? [Y/n(Default)]')
-                    if confirmation_answer == 'Y':
-                        delete_contact(contact)
-                        print('The contact was deleted!')
+                    if contact is not None:
+                        print(contact)
+                        confirmation_answer = 'Yn'
+                        while confirmation_answer != 'Y' and confirmation_answer != 'n' and confirmation_answer != '':
+                            confirmation_answer = input(
+                                'Delete this contact? [Y/n(Default)]')
+                        if confirmation_answer == 'Y':
+                            delete_contact(contact)
+                            print('The contact was deleted!')
+                        else:
+                            print('The deletion was canceled!')
                     else:
-                        print('The deletion was canceled!')
+                        print('No contact found!')
                 else:
                     print("Invalid ID:", guid)
             else:
