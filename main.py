@@ -4,8 +4,9 @@ import sys
 from prettytable import PrettyTable
 
 from contact import Contact
-from phonebook import PhoneBook
-from utils import is_valid_uuid, is_valid_phone_number, is_valid_email
+from phonebook import PhoneBook, list_contacts, count_contacts, delete_contact
+from utils import is_valid_uuid, is_valid_phone_number, is_valid_email, \
+    sorted_contact
 from custom_logger import logger
 
 
@@ -43,7 +44,7 @@ def main():
             phonebook.add_contact(contact_dict)
         elif option == 'L':
             # Listing all contacts
-            phonebook.list_contacts()
+            list_contacts(phonebook.contacts)
         elif option == 'Q':
             # Fuzzy querying a contact
             fuzzy_input = input("Please provide the contact you want to query:")
@@ -51,7 +52,7 @@ def main():
             print(best_match)
         elif option == 'D':
             # Soft-deleting a contact
-            if phonebook.count_contacts():
+            if count_contacts(phonebook.contacts):
                 guid = input("Please provide a valid contact ID:")
                 if is_valid_uuid(guid):
                     contact = phonebook.get_contact_by_id(guid)
@@ -61,7 +62,7 @@ def main():
                         confirmation_answer = input(
                             'Delete this contact? [Y/n(Default)]')
                     if confirmation_answer == 'Y':
-                        phonebook.delete_contact(contact)
+                        delete_contact(contact)
                         print('The contact was deleted!')
                     else:
                         print('The deletion was canceled!')
@@ -73,6 +74,10 @@ def main():
             # Exiting the system
             print("Goodbye!")
             sys.exit()
+        elif option == 'LA' or option == 'LD':
+            # Sorting contacts in ascending (LA) or descending (LD) order
+            list_contacts(sorted_contact(phonebook.contacts,
+                                         True if option == 'LD' else False))
         elif option == 'F':
             # Reading a list contacts from a csv file
             path = input("Please provide a complete csv file path:")

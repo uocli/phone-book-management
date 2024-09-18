@@ -1,5 +1,4 @@
 import uuid
-from datetime import datetime
 from fuzzywuzzy import process
 from prettytable import PrettyTable
 
@@ -17,6 +16,36 @@ OPERATIONS = {
 }
 
 
+def delete_contact(contact: Contact):
+    contact.delete()
+    logger.warning(contact.guid)
+
+
+def count_contacts(contacts):
+    counter = 0
+    for _, contact in contacts.items():
+        if not contact.is_deleted():
+            counter += 1
+    return counter
+
+
+def list_contacts(contacts):
+    if count_contacts(contacts):
+        phone_table = PrettyTable()
+        phone_table.field_names = ["ID", "First Name", "Last Name", "Phone",
+                                   "Email", "Address"]
+        for guid, contact in contacts.items():
+            if contact.is_deleted():
+                continue
+            phone_table.add_row(
+                [guid, contact.first_name, contact.last_name,
+                 contact.phone, contact.email,
+                 contact.address])
+        print(phone_table)
+    else:
+        print("No contacts found.")
+
+
 class PhoneBook:
     def __init__(self):
         self.contacts = {}  # uuid.UUID => Contact
@@ -27,17 +56,6 @@ class PhoneBook:
         contact = Contact(contact_dict)
         self.contacts[contact.guid] = contact
         logger.warning(contact.guid)
-
-    def delete_contact(self, contact: Contact):
-        contact.delete()
-        logger.warning(contact.guid)
-
-    def count_contacts(self):
-        counter = 0
-        for _, contact in self.contacts.items():
-            if not contact.is_deleted():
-                counter += 1
-        return counter
 
     def search_contact(self, query):
         contact_details = []
@@ -81,19 +99,3 @@ class PhoneBook:
         }, is_new=False)
         logger.warning(contact.guid)
         print(self.contacts[contact.guid])
-
-    def list_contacts(self):
-        if self.count_contacts():
-            phone_table = PrettyTable()
-            phone_table.field_names = ["ID", "First Name", "Last Name", "Phone",
-                                       "Email", "Address"]
-            for guid, contact in self.contacts.items():
-                if contact.is_deleted():
-                    continue
-                phone_table.add_row(
-                    [guid, contact.first_name, contact.last_name,
-                     contact.phone, contact.email,
-                     contact.address])
-            print(phone_table)
-        else:
-            print("No contacts found.")
