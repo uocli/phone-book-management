@@ -107,27 +107,32 @@ def main():
                 while not new_first_name.strip():
                     new_first_name = input(
                         f'First Name: [{contact.first_name}] (Required, press Enter to skip)')
-                    if not new_first_name:
+                    if not new_first_name.strip():
                         new_first_name = contact.first_name
 
                 while not new_last_name.strip():
                     new_last_name = input(
                         f'Last Name: [{contact.last_name}] (Required, press Enter to skip)')
-                    if not new_last_name:
+                    if not new_last_name.strip():
                         new_last_name = contact.last_name
 
                 while not new_phone.strip():
                     new_phone = input(
                         f'Phone: [{contact.phone}] (Required, press Enter to skip)')
-                    if not new_phone:
+                    if not new_phone.strip():
                         new_phone = contact.phone
 
                 new_email = input(
                     f'Email: [{contact.email}] (Optional, press Enter to skip or enter space to remove)')
-                if not new_email:
-                    new_email = contact.address
-                elif not new_email.strip():
-                    new_email = new_email.strip()
+                while new_email and new_email.strip() and not is_valid_email(
+                        new_email):
+                    new_email = input(
+                        f'Email: [{contact.email}] (Optional, press Enter to skip or enter space to remove)')
+                    if not new_email:
+                        new_email = contact.address
+                    elif not new_email.strip():
+                        new_email = ''
+                        break
 
                 new_address = input(
                     f'Address: [{contact.address}] (Optional, press Enter to skip or enter space to remove)')
