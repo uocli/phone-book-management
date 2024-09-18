@@ -109,6 +109,11 @@ class PhoneBook:
         """
         self.contacts = {}  # uuid.UUID => Contact
         self.options = OPERATIONS
+        self.option_table = PrettyTable()
+        self.option_table.field_names = ["Option (Case-insensitive)",
+                                         "Description"]
+        for option, description in self.options.items():
+            self.option_table.add_row([option, description])
 
     def add_contact(self, contact_dict, from_file=False):
         """
@@ -160,17 +165,70 @@ class PhoneBook:
 
         return None
 
-    def update_contact(self, contact: Contact):
-        self.contacts[contact.guid] = Contact({
-            "guid": contact.guid,
-            "first_name": contact.first_name,
-            "last_name": contact.last_name,
-            "phone": contact.phone,
-            "email": contact.email,
-            "address": contact.address,
-        }, is_new=False)
-        logger.warning(contact.guid)
-        print(self.contacts[contact.guid])
+    def update_contact(self):
+        """
+        Update a contact based on a given guid
+        :return: None
+        """
+        guid = ''
+        while not is_valid_uuid(guid):
+            guid = input("Please provide a valid contact ID:")
+
+        contact = self.get_contact_by_id(guid)
+        if contact is None:
+            print("No contact found!")
+        else:
+            print(contact)
+            new_first_name = ''
+            while not new_first_name.strip():
+                new_first_name = input(
+                    f'First Name: [{contact.first_name}] (Required, press Enter to skip)')
+                if not new_first_name.strip():
+                    new_first_name = contact.first_name
+
+            new_last_name = ''
+            while not new_last_name.strip():
+                new_last_name = input(
+                    f'Last Name: [{contact.last_name}] (Required, press Enter to skip)')
+                if not new_last_name.strip():
+                    new_last_name = contact.last_name
+
+            new_phone = ''
+            while not new_phone.strip():
+                new_phone = input(
+                    f'Phone: [{contact.phone}] (Required, press Enter to skip)')
+                if not new_phone.strip():
+                    new_phone = contact.phone
+
+            new_email = input(
+                f'Email: [{contact.email}] (Optional, press Enter to skip or enter space to remove)')
+            while new_email and new_email.strip() and not is_valid_email(
+                    new_email):
+                new_email = input(
+                    f'Email: [{contact.email}] (Optional, press Enter to skip or enter space to remove)')
+                if not new_email:
+                    new_email = contact.address
+                elif not new_email.strip():
+                    new_email = ''
+                    break
+
+            new_address = input(
+                f'Address: [{contact.address}] (Optional, press Enter to skip or enter space to remove)')
+            if not new_address:
+                new_address = contact.address
+            elif not new_address.strip():
+                new_address = new_address.strip()
+
+            self.contacts[contact.guid] = Contact({
+                "guid": contact.guid,
+                "first_name": new_first_name,
+                "last_name": new_last_name,
+                "phone": new_phone,
+                "email": new_email,
+                "address": new_address,
+            }, is_new=False)
+            logger.warning(contact.guid)
+            print(self.contacts[contact.guid])
 
     def delete_contact(self):
         if count_contacts(self.contacts):

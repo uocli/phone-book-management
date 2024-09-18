@@ -1,12 +1,9 @@
 import csv
 import sys
 
-from prettytable import PrettyTable
-
-from contact import Contact
 from phonebook import PhoneBook, list_contacts, create_contact_dict, \
     sorting_contact
-from utils import is_valid_uuid, is_valid_email, is_valid_date
+from utils import is_valid_date
 from custom_logger import logger
 
 
@@ -14,11 +11,7 @@ def main():
     print("\nWelcome to the Phone Book Management App!")
     logger.info('System started')
     phonebook = PhoneBook()
-    option_table = PrettyTable()
-    option_table.field_names = ["Option (Case-insensitive)", "Description"]
-    for option, description in phonebook.options.items():
-        option_table.add_row([option, description])
-    print(option_table)
+    print(phonebook.option_table)
     while True:
         option = input("Choose an option: ")
         option = option.upper()
@@ -71,68 +64,11 @@ def main():
                 print(e)
         elif option == 'U':
             # Updating a contact
-            guid = ''
-            while not is_valid_uuid(guid):
-                guid = input("Please provide a valid contact ID:")
-
-            contact = phonebook.get_contact_by_id(guid)
-            if contact is None:
-                print("No contact found!")
-            else:
-                print(contact)
-                new_first_name = ''
-                new_last_name = ''
-                new_phone = ''
-                while not new_first_name.strip():
-                    new_first_name = input(
-                        f'First Name: [{contact.first_name}] (Required, press Enter to skip)')
-                    if not new_first_name.strip():
-                        new_first_name = contact.first_name
-
-                while not new_last_name.strip():
-                    new_last_name = input(
-                        f'Last Name: [{contact.last_name}] (Required, press Enter to skip)')
-                    if not new_last_name.strip():
-                        new_last_name = contact.last_name
-
-                while not new_phone.strip():
-                    new_phone = input(
-                        f'Phone: [{contact.phone}] (Required, press Enter to skip)')
-                    if not new_phone.strip():
-                        new_phone = contact.phone
-
-                new_email = input(
-                    f'Email: [{contact.email}] (Optional, press Enter to skip or enter space to remove)')
-                while new_email and new_email.strip() and not is_valid_email(
-                        new_email):
-                    new_email = input(
-                        f'Email: [{contact.email}] (Optional, press Enter to skip or enter space to remove)')
-                    if not new_email:
-                        new_email = contact.address
-                    elif not new_email.strip():
-                        new_email = ''
-                        break
-
-                new_address = input(
-                    f'Address: [{contact.address}] (Optional, press Enter to skip or enter space to remove)')
-                if not new_address:
-                    new_address = contact.address
-                elif not new_address.strip():
-                    new_address = new_address.strip()
-
-                contact = Contact({
-                    "guid": contact.guid,
-                    "first_name": new_first_name,
-                    "last_name": new_last_name,
-                    "phone": new_phone,
-                    "email": new_email,
-                    "address": new_address,
-                }, is_new=False)
-                phonebook.update_contact(contact)
+            phonebook.update_contact()
         else:
             # Getting an invalid operation
             print("Only these options are available, please try again!")
-            print(option_table)
+            print(phonebook.option_table)
 
 
 if __name__ == "__main__":
