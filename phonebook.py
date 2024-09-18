@@ -33,15 +33,15 @@ def count_contacts(contacts):
     return counter
 
 
-def list_contacts(contacts, start_date: str = None,
-                  end_date: str = None):
-    start_datetime = None
-    end_datetime = None
-    if start_date is not None:
-        start_datetime = datetime.strptime(start_date, '%Y-%m-%d')
+def list_contacts(contacts, start_date_str: str = None,
+                  end_date_str: str = None):
+    start_date = None
+    end_date = None
+    if start_date_str is not None:
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
 
-    if end_date is not None:
-        end_datetime = datetime.strptime(end_date, '%Y-%m-%d')
+    if end_date_str is not None:
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
 
     if count_contacts(contacts):
         phone_table = PrettyTable()
@@ -50,14 +50,14 @@ def list_contacts(contacts, start_date: str = None,
         for guid, contact in contacts.items():
             if contact.is_deleted():
                 continue
-            if start_datetime is not None and contact.created_at() < start_datetime:
+            if start_date is not None and contact.created_date() < start_date:
                 continue
-            if end_datetime is not None and contact.created_at() > end_datetime:
+            if end_date is not None and contact.created_date() > end_date:
                 continue
             phone_table.add_row(
                 [guid, contact.first_name, contact.last_name,
                  contact.phone, contact.email,
-                 contact.address, contact.created_at()])
+                 contact.address, contact.created_date()])
         print(phone_table)
     else:
         print("No contacts found.")
@@ -69,8 +69,8 @@ class PhoneBook:
         self.logs = {}
         self.options = OPERATIONS
 
-    def add_contact(self, contact_dict):
-        contact = Contact(contact_dict)
+    def add_contact(self, contact_dict, from_file=False):
+        contact = Contact(contact_dict, is_new=True, from_file=from_file)
         self.contacts[contact.guid] = contact
         logger.warning(contact.guid)
 

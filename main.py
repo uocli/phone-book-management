@@ -99,7 +99,7 @@ def main():
                 with open(path) as csv_file:
                     reader = csv.DictReader(csv_file)
                     for row in reader:
-                        phonebook.add_contact(row)
+                        phonebook.add_contact(row, from_file=True)
             except FileNotFoundError as e:
                 print(e)
             except TypeError as e:
