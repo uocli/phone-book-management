@@ -5,7 +5,7 @@ from prettytable import PrettyTable
 
 from contact import Contact
 from phonebook import PhoneBook
-from utils import is_valid_uuid, is_valid_phone_number
+from utils import is_valid_uuid, is_valid_phone_number, is_valid_email
 from custom_logger import logger
 
 
@@ -31,6 +31,8 @@ def main():
             while not is_valid_phone_number(phone):
                 phone = input("Phone: ")
             email = input("Email (optional, press Enter to skip): ")
+            while email and not is_valid_email(email):
+                email = input("Email (optional, press Enter to skip): ")
             address = input("Address (optional, press Enter to skip): ")
             contact_dict = {'first_name': first_name, 'last_name': last_name,
                             'phone': phone, 'email': email, 'address': address}

@@ -1,6 +1,8 @@
 import re
 import uuid
 
+from email_validator import validate_email, EmailNotValidError
+
 
 def is_valid_uuid(uuid_str: str):
     try:
@@ -18,5 +20,9 @@ def is_valid_phone_number(phone_number):
     return False
 
 
-def is_valid_email():
-    pass
+def is_valid_email(email):
+    try:
+        validate_email(email, check_deliverability=False)
+        return True
+    except EmailNotValidError as e:
+        return False
