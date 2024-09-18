@@ -4,6 +4,7 @@ from fuzzywuzzy import process
 from prettytable import PrettyTable
 
 from contact import Contact
+from custom_logger import logger
 
 OPERATIONS = {
     'C': 'Create',
@@ -25,9 +26,11 @@ class PhoneBook:
     def add_contact(self, contact_dict):
         contact = Contact(contact_dict)
         self.contacts[contact.guid] = contact
+        logger.warning(contact.guid)
 
     def delete_contact(self, contact: Contact):
         contact.delete()
+        logger.warning(contact.guid)
 
     def count_contacts(self):
         counter = 0
@@ -56,6 +59,7 @@ class PhoneBook:
 
         if best_match:
             matched_index = contact_details.index(best_match[0])
+            logger.warning(contact_list[matched_index].guid)
             return contact_list[matched_index]
         return 'No contact found!'
 
@@ -75,6 +79,7 @@ class PhoneBook:
             "email": contact.email,
             "address": contact.address,
         }, is_new=False)
+        logger.warning(contact.guid)
         print(self.contacts[contact.guid])
 
     def list_contacts(self):
@@ -92,9 +97,3 @@ class PhoneBook:
             print(phone_table)
         else:
             print("No contacts found.")
-
-    def add_log(self, guid, operation):
-        if guid and guid not in self.logs:
-            self.logs[guid] = []
-        self.logs[guid].append(
-            datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ': ' + operation)

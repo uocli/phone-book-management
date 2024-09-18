@@ -6,10 +6,12 @@ from prettytable import PrettyTable
 from contact import Contact
 from phonebook import PhoneBook
 from utils import is_valid_uuid
+from custom_logger import logger
 
 
 def main():
     print("\nWelcome to the Phone Book Management App!")
+    logger.info('System started')
     phonebook = PhoneBook()
     option_table = PrettyTable()
     option_table.field_names = ["Option (Case-insensitive)", "Description"]
@@ -19,6 +21,7 @@ def main():
     while True:
         option = input("Choose an option (C,R,U,D or E): ")
         option = option.upper()
+        logger.info(option)
         if option == 'C':
             # Creating a new contact manually
             print('You are creating a new contact!')
