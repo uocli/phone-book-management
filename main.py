@@ -25,11 +25,15 @@ def main():
         if option == 'C':
             # Creating a new contact manually
             print('You are creating a new contact!')
-            first_name = input("First Name: ")
-            last_name = input("Last Name: ")
+            first_name = ''
+            while not first_name:
+                first_name = input("First Name (Required): ")
+            last_name = ''
+            while not last_name:
+                last_name = input("Last Name (Required): ")
             phone = ''
             while not is_valid_phone_number(phone):
-                phone = input("Phone: ")
+                phone = input("Phone in format (xxx) xxx-xxxx) (Required): ")
             email = input("Email (optional, press Enter to skip): ")
             while email and not is_valid_email(email):
                 email = input("Email (optional, press Enter to skip): ")
