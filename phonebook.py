@@ -7,14 +7,12 @@ from contact import Contact
 
 OPERATIONS = {
     'C': 'Create',
-    'Q  ': 'Fuzzy Query',
+    'Q': 'Fuzzy Query',
     'F': 'Load contacts from a CSV file',
     'U': 'Update',
     'D': 'Delete',
     'E': 'Exit',
-    'L': 'List',
-    'G': 'Get Option List',
-    'A': 'Admin'
+    'L': 'List'
 }
 
 
