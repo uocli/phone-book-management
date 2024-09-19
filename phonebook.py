@@ -223,6 +223,7 @@ class PhoneBook:
 
             new_email = input(
                 f'Email: [{contact.email}] (Optional, press Enter to skip or enter space to remove)')
+            new_email = contact.email if not new_email.strip() else new_email
             while new_email and new_email.strip() and not is_valid_email(
                     new_email):
                 new_email = input(
