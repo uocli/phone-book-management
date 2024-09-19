@@ -157,9 +157,7 @@ class PhoneBook:
             details = [
                 f"{contact.first_name}",
                 f"{contact.last_name}",
-                f"{contact.phone}",
-                f"{contact.email}",
-                f"{contact.address}"
+                f"{contact.phone}"
             ]
             contact_list.append(contact)
             contact_details.append(" | ".join(details))
