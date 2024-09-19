@@ -18,7 +18,7 @@ class Contact:
         self.phone = d['phone'] if 'phone' in d else ''
         self.email = d['email'] if 'email' in d else ''
         self.address = d['address'] if 'address' in d else ''
-        self._is_deleted = False
+        self.__is_deleted = False
         self.__created_date = datetime.strptime(d["created_date"],
                                                 '%Y-%m-%d').date() \
             if from_file and d["created_date"] and \
@@ -36,14 +36,14 @@ class Contact:
         Soft-delete a contact itself
         :return: None
         """
-        self._is_deleted = True
+        self.__is_deleted = True
 
     def is_deleted(self):
         """
         Get the deletion status of a contact
         :return: True if the contact has been deleted, False otherwise
         """
-        return self._is_deleted == True
+        return self.__is_deleted == True
 
     def __str__(self):
         """
