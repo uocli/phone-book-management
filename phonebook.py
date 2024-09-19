@@ -11,7 +11,7 @@ from utils import is_valid_phone_number, is_valid_email, is_valid_uuid
 OPERATIONS = {
     'C': 'Create',
     'Q': 'Fuzzy Query',
-    'F': 'Load contacts from a CSV file',
+    'F': 'Upload contacts from a CSV file',
     'U': 'Update',
     'D': 'Delete',
     'E': 'Exit',
